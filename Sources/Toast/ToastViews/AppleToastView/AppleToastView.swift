@@ -11,8 +11,8 @@ import UIKit
 public class AppleToastView : UIView, ToastView {
     private let minHeight: CGFloat
     private let minWidth: CGFloat
-
-    private let darkBackgroundColor: UIColor
+    
+    private let darkBackgroundColor: UIColor?
     private let lightBackgroundColor: UIColor
     
     private let child: UIView
@@ -23,8 +23,9 @@ public class AppleToastView : UIView, ToastView {
         child: UIView,
         minHeight: CGFloat = 58,
         minWidth: CGFloat = 150,
-        darkBackgroundColor: UIColor = UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00),
-        lightBackgroundColor: UIColor = UIColor(red: 0.99, green: 0.99, blue: 0.99, alpha: 1.00)
+        darkBackgroundColor: UIColor? = nil,
+        lightBackgroundColor: UIColor = UIColor(red: 0.99, green: 0.99, blue: 0.99, alpha: 1.00),
+        cornerRadius: CGFloat? = nil
     ) {
         self.minHeight = minHeight
         self.minWidth = minWidth
@@ -32,11 +33,12 @@ public class AppleToastView : UIView, ToastView {
         self.lightBackgroundColor = lightBackgroundColor
         self.child = child
         super.init(frame: .zero)
+        self.layer.cornerRadius = cornerRadius == nil ? frame.height / 2 : cornerRadius!
         
         addSubview(child)
     }
     
-    public func createView(for toast: Toast) {
+    public func createView(for toast: Toast, topSpacing: CGFloat) {
         self.toast = toast
         guard let superview = superview else { return }
         translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +48,7 @@ public class AppleToastView : UIView, ToastView {
             widthAnchor.constraint(greaterThanOrEqualToConstant: minWidth),
             leadingAnchor.constraint(greaterThanOrEqualTo: superview.leadingAnchor, constant: 10),
             trailingAnchor.constraint(lessThanOrEqualTo: superview.trailingAnchor, constant: -10),
-            topAnchor.constraint(equalTo: superview.layoutMarginsGuide.topAnchor, constant: 0),
+            topAnchor.constraint(equalTo: superview.layoutMarginsGuide.topAnchor, constant: topSpacing),
             centerXAnchor.constraint(equalTo: superview.centerXAnchor)
         ])
         
@@ -65,9 +67,12 @@ public class AppleToastView : UIView, ToastView {
     private func style() {
         layoutIfNeeded()
         clipsToBounds = true
-        layer.cornerRadius = frame.height / 2
         if #available(iOS 12.0, *) {
-            backgroundColor = traitCollection.userInterfaceStyle == .light ? lightBackgroundColor : darkBackgroundColor
+            if let darkBackgroundColor = darkBackgroundColor {
+                backgroundColor = traitCollection.userInterfaceStyle == .light ? lightBackgroundColor : darkBackgroundColor
+            } else {
+                backgroundColor = lightBackgroundColor
+            }
         } else {
             backgroundColor = lightBackgroundColor
         }
@@ -95,5 +100,11 @@ public class AppleToastView : UIView, ToastView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+public extension UIColor {
+    class var toastDefaultDark: UIColor {
+        UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1.00)
     }
 }

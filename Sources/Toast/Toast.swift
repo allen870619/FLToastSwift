@@ -106,7 +106,7 @@ public class Toast {
     /// - Parameter delay: Time after which the toast is shown
     public func show(after delay: TimeInterval = 0) {
         config.view?.addSubview(view) ?? topController()?.view.addSubview(view)
-        view.createView(for: self)
+        view.createView(for: self, topSpacing: config.topSpacing)
         
         UIView.animate(withDuration: config.animationTime, delay: delay, options: [.curveEaseOut, .allowUserInteraction]) {
             self.view.transform = .identity

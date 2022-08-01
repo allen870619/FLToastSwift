@@ -68,6 +68,7 @@ The `text`, `default` and `custom` methods support custom configuration options.
 |-----------------|-----------------------------------------------------------------------------------------------------|----------------|---------|
 | `autoHide`      | When set to true, the toast will automatically close itself after display time has elapsed.         | `Bool`         | `true`  |
 | `enablePanToClose`      | When set to true, the toast will be able to close by swiping up.         | `Bool`         | `true`  |
+| `topSpacing`      | The spacing between Toast and topAnchor.         | `CGFloat`         | `0`  |
 | `displayTime`   | The duration the toast will be displayed before it will close when autoHide set to true in seconds. | `TimeInterval` | `4`     |
 | `animationTime` | Duration of the show and close animation in seconds.                                                | `TimeInterval` | `0.2`   |
 | `attachTo`      | The view which the toast view will be attached to.                                                  | `UIView`       | `nil`   |
@@ -77,6 +78,7 @@ The `text`, `default` and `custom` methods support custom configuration options.
 let config = ToastConfiguration(
     autoHide: true,
     enablePanToClose: true,
+    topSpacing: 0,
     displayTime: 5,
     animationTime: 0.2
 )

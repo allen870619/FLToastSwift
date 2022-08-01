@@ -9,5 +9,5 @@ import Foundation
 import UIKit
 
 public protocol ToastView : UIView {
-    func createView(for toast: Toast)
+    func createView(for toast: Toast, topSpacing: CGFloat)
 }
