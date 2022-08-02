@@ -31,19 +31,16 @@ public class AppleToastView : UIView, ToastView {
         child: UIView,
         minHeight: CGFloat = 58,
         minWidth: CGFloat = 150,
-        darkBackgroundColor: UIColor? = nil,
-        cornerRadius: CGFloat? = nil
     ) {
         self.minHeight = minHeight
         self.minWidth = minWidth
-        self.darkBackgroundColor = darkBackgroundColor
         self.child = child
         super.init(frame: .zero)
-        self.layer.cornerRadius = cornerRadius == nil ? frame.height / 2 : cornerRadius!
         
         // set default
         backgroundColor = UIColor(red: 0.99, green: 0.99, blue: 0.99, alpha: 1.00)
         isDarkOverride = false
+        self.layer.cornerRadius = frame.height / 2
         
         addSubview(child)
     }
