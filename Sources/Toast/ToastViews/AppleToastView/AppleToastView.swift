@@ -30,7 +30,7 @@ public class AppleToastView : UIView, ToastView {
     public init(
         child: UIView,
         minHeight: CGFloat = 58,
-        minWidth: CGFloat = 150,
+        minWidth: CGFloat = 150
     ) {
         self.minHeight = minHeight
         self.minWidth = minWidth
