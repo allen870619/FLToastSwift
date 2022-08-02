@@ -12,8 +12,16 @@ public class AppleToastView : UIView, ToastView {
     private let minHeight: CGFloat
     private let minWidth: CGFloat
     
-    private let darkBackgroundColor: UIColor?
-    private let lightBackgroundColor: UIColor
+    /// Set this if want to use specific color, or else it will according to background color's dark theme
+    ///
+    /// Please call it before calling `show()`
+    var darkBackgroundColor: UIColor?
+    private var isDarkOverride = false
+    public override var backgroundColor: UIColor?{
+        didSet{
+            isDarkOverride = true
+        }
+    }
     
     private let child: UIView
     
@@ -24,16 +32,18 @@ public class AppleToastView : UIView, ToastView {
         minHeight: CGFloat = 58,
         minWidth: CGFloat = 150,
         darkBackgroundColor: UIColor? = nil,
-        lightBackgroundColor: UIColor = UIColor(red: 0.99, green: 0.99, blue: 0.99, alpha: 1.00),
         cornerRadius: CGFloat? = nil
     ) {
         self.minHeight = minHeight
         self.minWidth = minWidth
         self.darkBackgroundColor = darkBackgroundColor
-        self.lightBackgroundColor = lightBackgroundColor
         self.child = child
         super.init(frame: .zero)
         self.layer.cornerRadius = cornerRadius == nil ? frame.height / 2 : cornerRadius!
+        
+        // set default
+        backgroundColor = UIColor(red: 0.99, green: 0.99, blue: 0.99, alpha: 1.00)
+        isDarkOverride = false
         
         addSubview(child)
     }
@@ -69,12 +79,14 @@ public class AppleToastView : UIView, ToastView {
         clipsToBounds = true
         if #available(iOS 12.0, *) {
             if let darkBackgroundColor = darkBackgroundColor {
-                backgroundColor = traitCollection.userInterfaceStyle == .light ? lightBackgroundColor : darkBackgroundColor
-            } else {
-                backgroundColor = lightBackgroundColor
+                if traitCollection.userInterfaceStyle == .dark{
+                    backgroundColor = darkBackgroundColor
+                }
+            }else{
+                if traitCollection.userInterfaceStyle == .dark && !isDarkOverride{
+                    backgroundColor = .toastDefaultDark
+                }
             }
-        } else {
-            backgroundColor = lightBackgroundColor
         }
         
         addShadow()
